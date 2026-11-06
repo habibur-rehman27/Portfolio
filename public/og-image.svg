@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0B0D12"/>
+  
+  <!-- Subtle Blueprint Grid -->
+  <defs>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="15" cy="15" r="1" fill="#232834" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.6"/>
+  
+  <!-- Outer hairline frame -->
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#12151C" stroke="#232834" stroke-width="2"/>
+  
+  <!-- Top bar -->
+  <line x1="40" y1="110" x2="1160" y2="110" stroke="#232834" stroke-width="2"/>
+  <circle cx="75" cy="75" r="7" fill="#EF4444"/>
+  <circle cx="100" cy="75" r="7" fill="#EAB308"/>
+  <circle cx="125" cy="75" r="7" fill="#22C55E"/>
+  
+  <text x="160" y="81" font-family="'JetBrains Mono', monospace" font-size="16" fill="#9AA4B5" font-weight="600">SYS.CONSOLE // HABIB-UR-REHMAN // PORTFOLIO</text>
+  
+  <!-- Brand logo badge -->
+  <rect x="80" y="160" width="70" height="70" rx="12" fill="#181C25" stroke="#C6FF3D" stroke-width="2"/>
+  <text x="96" y="208" font-family="'Space Grotesk', sans-serif" font-size="34" font-weight="700" fill="#E8ECF3">HR<tspan fill="#C6FF3D">.</tspan></text>
+  
+  <!-- Monospace Tag -->
+  <rect x="175" y="175" width="380" height="36" rx="18" fill="#0B0D12" stroke="#232834" stroke-width="1.5"/>
+  <circle cx="195" cy="193" r="4.5" fill="#C6FF3D"/>
+  <text x="212" y="198" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600" fill="#C6FF3D">OPEN TO INTERNSHIPS &amp; ENTRY-LEVEL ROLES</text>
+  
+  <!-- Main headline -->
+  <text x="80" y="300" font-family="'Space Grotesk', sans-serif" font-size="56" font-weight="700" fill="#E8ECF3">I build AI systems that actually <tspan fill="#C6FF3D">ship.</tspan></text>
+  
+  <!-- Sub-copy -->
+  <text x="80" y="360" font-family="'Inter', sans-serif" font-size="24" fill="#9AA4B5">Computer Science student specializing in RAG pipelines, multi-agent systems, and full-stack web apps.</text>
+  
+  <!-- Metadata pills -->
+  <rect x="80" y="440" width="220" height="44" rx="8" fill="#181C25" stroke="#232834"/>
+  <text x="100" y="468" font-family="'JetBrains Mono', monospace" font-size="14" fill="#E8ECF3">Acclivousbyte Intern (2026)</text>
+  
+  <rect x="320" y="440" width="220" height="44" rx="8" fill="#181C25" stroke="#232834"/>
+  <text x="340" y="468" font-family="'JetBrains Mono', monospace" font-size="14" fill="#E8ECF3">Superior University · 3.64</text>
+  
+  <rect x="560" y="440" width="180" height="44" rx="8" fill="#181C25" stroke="#232834"/>
+  <text x="580" y="468" font-family="'JetBrains Mono', monospace" font-size="14" fill="#5EEAD4">Lahore, Pakistan</text>
+  
+  <!-- Bottom Right Attribution -->
+  <text x="1110" y="540" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="14" fill="#5F6B7E">https://habibur-rehman.dev</text>
+</svg>
+
