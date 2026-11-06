@@ -131,8 +131,27 @@ export const Hero: React.FC = () => {
         >
           {/* Left Column: Editorial Headline & Sub-copy */}
           <div className="lg:col-span-7 flex flex-col items-start">
-            {/* Status Monospace Badge */}
-            <motion.div variants={itemVariants} className="mb-6">
+            {/* Profile Photo + Status Badge Row */}
+            <motion.div variants={itemVariants} className="flex items-center gap-4 mb-6">
+              {/* Profile Photo */}
+              <div className="relative shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl p-0.5 border border-accent-lime/60 bg-surface shadow-lime-glow-sm overflow-hidden">
+                {profile.photoPath ? (
+                  <img
+                    src={profile.photoPath}
+                    alt={profile.name}
+                    className="w-full h-full object-cover rounded-[10px]"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded-[10px] bg-surface-elevated flex items-center justify-center">
+                    <span className="font-heading text-lg font-bold tracking-widest text-accent-lime">
+                      {profile.initials}
+                    </span>
+                  </div>
+                )}
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-accent-lime border-2 border-base" aria-hidden="true" />
+              </div>
+
+              {/* Status Monospace Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-hairline bg-surface/90 shadow-sm backdrop-blur-sm">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-lime opacity-75" />

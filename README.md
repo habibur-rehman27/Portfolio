@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Habib-ur-Rehman — Personal Portfolio & AI Systems Console
 
 An editorial, high-performance personal portfolio website built with **React 19, Vite, TypeScript, Tailwind CSS, and Framer Motion**. 
@@ -171,3 +172,6 @@ Before final public launch, ensure you've customized:
 - [ ] **Project Screenshots**: Add optional preview images to `/public/projects/` and reference in `image`.
 - [ ] **OG Social Preview**: Customize [`/public/og-image.svg`](public/og-image.svg).
 - [ ] **Canonical URL**: Update `https://habibur-rehman.dev/` in `index.html`, `sitemap.xml`, and `robots.txt` with your custom domain.
+=======
+# Portfolio
+>>>>>>> 8aae668a403dbac6659f0800a6b6e30d54bd08b8

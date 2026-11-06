@@ -104,6 +104,12 @@ export interface HeroContent {
   }>;
 }
 
+export interface EmailJSConfig {
+  serviceId: string;
+  templateId: string;
+  publicKey: string;
+}
+
 export interface ContactContent {
   sectionLabel: string;
   closingHeadline: string;
@@ -119,8 +125,12 @@ export interface ContactContent {
     messageLabel: string;
     messagePlaceholder: string;
     submitButton: string;
+    sendingButton: string;
     subjectPrefix: string;
+    successMessage: string;
+    errorMessage: string;
   };
+  emailjs: EmailJSConfig;
 }
 
 export interface NavigationLink {
@@ -468,8 +478,23 @@ export const contactContent: ContactContent = {
     emailPlaceholder: 'e.g. s.jenkins@company.com',
     messageLabel: 'Project or Opportunity Brief',
     messagePlaceholder: 'Tell me about the role, technical challenge, or team...',
-    submitButton: 'Dispatch Message via Mail Client',
+    submitButton: 'Dispatch Transmission',
+    sendingButton: 'Transmitting...',
     subjectPrefix: '[Portfolio Inquiry] From',
+    successMessage: 'Message transmitted successfully! I will respond shortly.',
+    errorMessage: 'Transmission failed. Please try again or email me directly.',
+  },
+  // ──────────────────────────────────────────────────────────────
+  // EmailJS Configuration — Replace these with your own keys:
+  //   1. Sign up free at https://www.emailjs.com
+  //   2. Add an email service (Gmail) → copy the Service ID
+  //   3. Create an email template → copy the Template ID
+  //   4. Go to Account → General → copy the Public Key
+  // ──────────────────────────────────────────────────────────────
+  emailjs: {
+    serviceId: 'YOUR_SERVICE_ID',       // e.g. 'service_abc123'
+    templateId: 'YOUR_TEMPLATE_ID',     // e.g. 'template_xyz789'
+    publicKey: 'YOUR_PUBLIC_KEY',        // e.g. 'aB1cD2eF3gH4iJ5k'
   },
 };
 

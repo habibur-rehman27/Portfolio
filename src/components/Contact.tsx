@@ -9,9 +9,23 @@ import {
   ArrowUpRight,
   Terminal,
   AlertCircle,
+  Loader2,
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { profile, contactContent } from '../data/content';
 import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './Icons';
+
+const isEmailJSConfigured = (): boolean => {
+  const { serviceId, templateId, publicKey } = contactContent.emailjs;
+  return (
+    !!serviceId &&
+    !!templateId &&
+    !!publicKey &&
+    serviceId !== 'YOUR_SERVICE_ID' &&
+    templateId !== 'YOUR_TEMPLATE_ID' &&
+    publicKey !== 'YOUR_PUBLIC_KEY'
+  );
+};
 
 export const Contact: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -23,6 +37,7 @@ export const Contact: React.FC = () => {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const handleCopyEmail = async () => {
     try {
@@ -48,7 +63,7 @@ export const Contact: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
     setIsSuccess(false);
@@ -68,15 +83,39 @@ export const Contact: React.FC = () => {
       return;
     }
 
-    // Compose prefilled mailto link
-    const subject = `${contactContent.form.subjectPrefix} ${formState.name}`;
-    const body = `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}\n\n[Sent from portfolio contact console]`;
-    const mailtoUrl = `mailto:${profile.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
-
-    setIsSuccess(true);
-    window.location.href = mailtoUrl;
+    // If EmailJS is configured, send via EmailJS
+    if (isEmailJSConfigured()) {
+      setIsSending(true);
+      try {
+        await emailjs.send(
+          contactContent.emailjs.serviceId,
+          contactContent.emailjs.templateId,
+          {
+            from_name: formState.name,
+            from_email: formState.email,
+            message: formState.message,
+            to_name: profile.name,
+          },
+          contactContent.emailjs.publicKey
+        );
+        setIsSuccess(true);
+        setFormState({ name: '', email: '', message: '' });
+        setTimeout(() => setIsSuccess(false), 5000);
+      } catch {
+        setErrorMessage(contactContent.form.errorMessage);
+      } finally {
+        setIsSending(false);
+      }
+    } else {
+      // Fallback: open mailto link
+      const subject = `${contactContent.form.subjectPrefix} ${formState.name}`;
+      const body = `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}\n\n[Sent from portfolio contact console]`;
+      const mailtoUrl = `mailto:${profile.email}?subject=${encodeURIComponent(
+        subject
+      )}&body=${encodeURIComponent(body)}`;
+      setIsSuccess(true);
+      window.location.href = mailtoUrl;
+    }
   };
 
   const revealVariants: Variants = {
@@ -272,7 +311,7 @@ export const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Right Column: Simple Contact Form UI (opens prefilled mailto) */}
+          {/* Right Column: Contact Form (EmailJS or mailto fallback) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -287,32 +326,46 @@ export const Contact: React.FC = () => {
                   <span>TRANSMISSION_DISPATCH_CONSOLE</span>
                 </div>
                 <span className="text-[10px] text-content-muted bg-base px-2 py-0.5 rounded border border-hairline">
-                  DIRECT_CLIENT_TRIGGER
+                  {isEmailJSConfigured() ? 'DIRECT_SEND' : 'MAILTO_FALLBACK'}
                 </span>
               </div>
 
               <form onSubmit={handleSubmit} noValidate className="space-y-4">
                 {/* Validation Error Banner */}
-                {errorMessage && (
-                  <div
-                    role="alert"
-                    className="p-3 rounded-lg border border-red-500/40 bg-red-500/10 text-red-400 font-mono text-xs flex items-center gap-2"
-                  >
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{errorMessage}</span>
-                  </div>
-                )}
+                <AnimatePresence>
+                  {errorMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      role="alert"
+                      className="p-3 rounded-lg border border-red-500/40 bg-red-500/10 text-red-400 font-mono text-xs flex items-center gap-2"
+                    >
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{errorMessage}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Success Banner */}
-                {isSuccess && (
-                  <div
-                    role="status"
-                    className="p-3 rounded-lg border border-accent-lime/40 bg-accent-lime/10 text-accent-lime font-mono text-xs flex items-center gap-2"
-                  >
-                    <Check className="w-4 h-4 shrink-0" />
-                    <span>Opening mail client with prefilled transmission...</span>
-                  </div>
-                )}
+                <AnimatePresence>
+                  {isSuccess && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      role="status"
+                      className="p-3 rounded-lg border border-accent-lime/40 bg-accent-lime/10 text-accent-lime font-mono text-xs flex items-center gap-2"
+                    >
+                      <Check className="w-4 h-4 shrink-0" />
+                      <span>
+                        {isEmailJSConfigured()
+                          ? contactContent.form.successMessage
+                          : 'Opening mail client with prefilled transmission...'}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name field */}
@@ -327,10 +380,11 @@ export const Contact: React.FC = () => {
                       id="contact-name"
                       type="text"
                       required
+                      disabled={isSending}
                       value={formState.name}
                       onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                       placeholder={contactContent.form.namePlaceholder}
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-hairline bg-base text-content-primary placeholder:text-content-muted text-sm font-mono focus:border-accent-lime focus:outline-none transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-hairline bg-base text-content-primary placeholder:text-content-muted text-sm font-mono focus:border-accent-lime focus:outline-none transition-colors disabled:opacity-50"
                     />
                   </div>
 
@@ -346,10 +400,11 @@ export const Contact: React.FC = () => {
                       id="contact-email"
                       type="email"
                       required
+                      disabled={isSending}
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                       placeholder={contactContent.form.emailPlaceholder}
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-hairline bg-base text-content-primary placeholder:text-content-muted text-sm font-mono focus:border-accent-lime focus:outline-none transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-hairline bg-base text-content-primary placeholder:text-content-muted text-sm font-mono focus:border-accent-lime focus:outline-none transition-colors disabled:opacity-50"
                     />
                   </div>
                 </div>
@@ -366,20 +421,31 @@ export const Contact: React.FC = () => {
                     id="contact-message"
                     rows={4}
                     required
+                    disabled={isSending}
                     value={formState.message}
                     onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                     placeholder={contactContent.form.messagePlaceholder}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-hairline bg-base text-content-primary placeholder:text-content-muted text-sm font-mono focus:border-accent-lime focus:outline-none transition-colors resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-hairline bg-base text-content-primary placeholder:text-content-muted text-sm font-mono focus:border-accent-lime focus:outline-none transition-colors resize-none disabled:opacity-50"
                   />
                 </div>
 
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-lg bg-accent-lime text-white dark:text-[#0B0D12] font-semibold text-sm font-mono hover:bg-accent-lime-hover shadow-lime-glow flex items-center justify-center gap-2 transition-all focus-visible:ring-2 focus-visible:ring-accent-lime min-h-[44px]"
+                  disabled={isSending}
+                  className="w-full py-3.5 px-6 rounded-lg bg-accent-lime text-white dark:text-[#0B0D12] font-semibold text-sm font-mono hover:bg-accent-lime-hover shadow-lime-glow flex items-center justify-center gap-2 transition-all focus-visible:ring-2 focus-visible:ring-accent-lime min-h-[44px] disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>{contactContent.form.submitButton}</span>
+                  {isSending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>{contactContent.form.sendingButton}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>{contactContent.form.submitButton}</span>
+                    </>
+                  )}
                 </button>
               </form>
             </div>
