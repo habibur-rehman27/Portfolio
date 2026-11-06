@@ -183,7 +183,7 @@ export const profile: Profile = {
   whatsapp: '+923034097496',
   whatsappUrl: 'https://wa.me/923034097496',
   cvPath: '/Habib-ur-Rehman_CV.pdf',
-  photoPath: '', // Set image path here when photo is added (e.g. '/profile.jpg')
+  photoPath: '/profile.jpg',
   statusText: 'Open to internships & entry-level roles',
   availability: 'Available immediately',
   summary:
