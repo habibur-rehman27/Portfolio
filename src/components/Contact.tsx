@@ -11,7 +11,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { profile, contactContent } from '../data/content';
-import { GithubIcon, LinkedinIcon } from './Icons';
+import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './Icons';
 
 export const Contact: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -212,7 +212,7 @@ export const Contact: React.FC = () => {
                   href={profile.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-xl border border-hairline bg-base flex items-center justify-between hover:border-accent-lime/60 hover:text-accent-lime text-content-primary transition-all group"
+                  className="p-3 rounded-xl border border-hairline bg-base flex items-center justify-between hover:border-accent-lime/60 hover:text-accent-lime text-content-primary transition-all group min-h-[44px]"
                 >
                   <div className="flex items-center gap-2">
                     <GithubIcon className="w-4 h-4 text-accent-lime" />
@@ -225,13 +225,40 @@ export const Contact: React.FC = () => {
                   href={profile.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-xl border border-hairline bg-base flex items-center justify-between hover:border-accent-lime/60 hover:text-accent-lime text-content-primary transition-all group"
+                  className="p-3 rounded-xl border border-hairline bg-base flex items-center justify-between hover:border-accent-lime/60 hover:text-accent-lime text-content-primary transition-all group min-h-[44px]"
                 >
                   <div className="flex items-center gap-2">
                     <LinkedinIcon className="w-4 h-4 text-accent-cyan" />
                     <span>LinkedIn</span>
                   </div>
                   <ArrowUpRight className="w-3.5 h-3.5 text-content-muted group-hover:text-accent-lime transition-colors" />
+                </a>
+
+                {/* WhatsApp Direct Messaging Channel */}
+                <a
+                  href={profile.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Message Habib-ur-Rehman on WhatsApp at ${profile.whatsapp}`}
+                  className="sm:col-span-2 p-3 rounded-xl border border-hairline bg-base flex items-center justify-between hover:border-accent-lime/60 hover:text-accent-lime text-content-primary transition-all group min-h-[44px]"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-1.5 rounded-lg border border-accent-lime/30 bg-accent-lime/10 text-accent-lime">
+                      <WhatsAppIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold">WhatsApp</span>
+                        <span className="text-[10px] text-accent-lime font-mono bg-accent-lime/10 px-1.5 py-0.2 rounded">
+                          DIRECT
+                        </span>
+                      </div>
+                      <span className="font-mono text-[11px] text-content-muted">
+                        {profile.whatsapp}
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-content-muted group-hover:text-accent-lime transition-colors" />
                 </a>
               </div>
 

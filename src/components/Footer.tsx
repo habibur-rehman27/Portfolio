@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowUp, Terminal, Mail } from 'lucide-react';
 import { footerContent, profile } from '../data/content';
-import { GithubIcon, LinkedinIcon } from './Icons';
+import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './Icons';
 
 export const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -51,6 +51,15 @@ export const Footer: React.FC = () => {
                 className="p-2 rounded-lg border border-hairline bg-surface hover:text-accent-lime hover:border-accent-lime/60 text-content-secondary transition-colors"
               >
                 <LinkedinIcon className="w-4 h-4" />
+              </a>
+              <a
+                href={profile.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Message Habib-ur-Rehman on WhatsApp"
+                className="p-2 rounded-lg border border-hairline bg-surface hover:text-accent-lime hover:border-accent-lime/60 text-content-secondary transition-colors"
+              >
+                <WhatsAppIcon className="w-4 h-4" />
               </a>
               <a
                 href={`mailto:${profile.email}`}

@@ -6,6 +6,8 @@ export interface Profile {
   email: string;
   github: string;
   linkedin: string;
+  whatsapp: string;
+  whatsappUrl: string;
   cvPath: string;
   photoPath: string; // Set to image URL or leave empty to use 'initials' fallback
   summary: string;
@@ -178,6 +180,8 @@ export const profile: Profile = {
   email: 'habibhr112211@gmail.com',
   github: 'https://github.com/habibur-rehman27',
   linkedin: 'https://www.linkedin.com/in/habib-ur-rehman27',
+  whatsapp: '+923034097496',
+  whatsappUrl: 'https://wa.me/923034097496',
   cvPath: '/Habib-ur-Rehman_CV.pdf',
   photoPath: '', // Set image path here when photo is added (e.g. '/profile.jpg')
   statusText: 'Open to internships & entry-level roles',

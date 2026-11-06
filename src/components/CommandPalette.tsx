@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { profile, NAVIGATION_LINKS } from '../data/content';
+import { WhatsAppIcon } from './Icons';
 
 export const CommandPalette: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -221,6 +222,23 @@ export const CommandPalette: React.FC = () => {
                       <kbd className="px-1.5 py-0.5 rounded border border-hairline bg-surface text-[10px] text-accent-lime">
                         C
                       </kbd>
+                    </a>
+
+                    {/* WhatsApp Direct Chat */}
+                    <a
+                      href={profile.whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setIsOpen(false)}
+                      className="w-full flex items-center justify-between p-2 rounded-lg border border-hairline/70 bg-base/60 hover:border-accent-lime/60 hover:text-accent-lime transition-all"
+                    >
+                      <div className="flex items-center gap-2">
+                        <WhatsAppIcon className="w-3.5 h-3.5 text-accent-lime" />
+                        <span>Chat on WhatsApp ({profile.whatsapp})</span>
+                      </div>
+                      <span className="text-accent-lime text-[10px]">
+                        OPEN &rarr;
+                      </span>
                     </a>
 
                     {/* Copy Email */}
