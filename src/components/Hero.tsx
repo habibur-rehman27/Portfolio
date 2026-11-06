@@ -8,7 +8,7 @@ import {
   Terminal,
 } from 'lucide-react';
 import { heroContent, profile } from '../data/content';
-import { GithubIcon, LinkedinIcon } from './Icons';
+import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './Icons';
 import { RagPipelineDiagram } from './RagPipelineDiagram';
 
 // Animated Counter component
@@ -223,6 +223,15 @@ export const Hero: React.FC = () => {
                   className="p-3 rounded-lg border border-hairline bg-surface hover:bg-surface-elevated hover:border-accent-lime/60 hover:text-accent-lime text-content-secondary transition-all duration-200 focus-visible:ring-2 focus-visible:ring-accent-lime min-w-[44px] min-h-[44px] flex items-center justify-center"
                 >
                   <LinkedinIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href={profile.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Chat with Habib-ur-Rehman on WhatsApp at ${profile.whatsapp}`}
+                  className="p-3 rounded-lg border border-hairline bg-surface hover:bg-surface-elevated hover:border-accent-lime/60 hover:text-accent-lime text-content-secondary transition-all duration-200 focus-visible:ring-2 focus-visible:ring-accent-lime min-w-[44px] min-h-[44px] flex items-center justify-center"
+                >
+                  <WhatsAppIcon className="w-4 h-4 text-accent-lime" />
                 </a>
               </div>
             </motion.div>
