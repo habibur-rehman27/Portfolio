@@ -11,21 +11,8 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 import { profile, contactContent } from '../data/content';
 import { GithubIcon, LinkedinIcon, WhatsAppIcon } from './Icons';
-
-const isEmailJSConfigured = (): boolean => {
-  const { serviceId, templateId, publicKey } = contactContent.emailjs;
-  return (
-    !!serviceId &&
-    !!templateId &&
-    !!publicKey &&
-    serviceId !== 'YOUR_SERVICE_ID' &&
-    templateId !== 'YOUR_TEMPLATE_ID' &&
-    publicKey !== 'YOUR_PUBLIC_KEY'
-  );
-};
 
 export const Contact: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -44,7 +31,6 @@ export const Contact: React.FC = () => {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(profile.email);
       } else {
-        // Fallback for non-secure contexts
         const textArea = document.createElement('textarea');
         textArea.value = profile.email;
         textArea.style.position = 'fixed';
@@ -83,38 +69,37 @@ export const Contact: React.FC = () => {
       return;
     }
 
-    // If EmailJS is configured, send via EmailJS
-    if (isEmailJSConfigured()) {
-      setIsSending(true);
-      try {
-        await emailjs.send(
-          contactContent.emailjs.serviceId,
-          contactContent.emailjs.templateId,
-          {
-            from_name: formState.name,
-            from_email: formState.email,
-            message: formState.message,
-            to_name: profile.name,
-          },
-          contactContent.emailjs.publicKey
-        );
+    setIsSending(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formState.name.trim(),
+          email: formState.email.trim(),
+          message: formState.message.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
         setIsSuccess(true);
         setFormState({ name: '', email: '', message: '' });
         setTimeout(() => setIsSuccess(false), 5000);
-      } catch {
-        setErrorMessage(contactContent.form.errorMessage);
-      } finally {
-        setIsSending(false);
+      } else {
+        setErrorMessage(data.error || contactContent.form.errorMessage);
       }
-    } else {
-      // Fallback: open mailto link
+    } catch {
+      // Fallback: open mailto link if API is not available
       const subject = `${contactContent.form.subjectPrefix} ${formState.name}`;
-      const body = `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}\n\n[Sent from portfolio contact console]`;
-      const mailtoUrl = `mailto:${profile.email}?subject=${encodeURIComponent(
-        subject
-      )}&body=${encodeURIComponent(body)}`;
-      setIsSuccess(true);
+      const body = `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`;
+      const mailtoUrl = `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       window.location.href = mailtoUrl;
+      setIsSuccess(true);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -199,7 +184,6 @@ export const Contact: React.FC = () => {
                   {profile.email}
                 </a>
 
-                {/* Click to Copy Button */}
                 <button
                   type="button"
                   onClick={handleCopyEmail}
@@ -220,12 +204,10 @@ export const Contact: React.FC = () => {
                 </button>
               </div>
 
-              {/* Accessible Live Region Toast Announcement */}
               <div aria-live="polite" className="sr-only">
                 {copied ? 'Email address copied to clipboard.' : ''}
               </div>
 
-              {/* Toast Pill visible feedback */}
               <AnimatePresence>
                 {copied && (
                   <motion.div
@@ -311,7 +293,7 @@ export const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Right Column: Contact Form (EmailJS or mailto fallback) */}
+          {/* Right Column: Contact Form */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -326,7 +308,7 @@ export const Contact: React.FC = () => {
                   <span>TRANSMISSION_DISPATCH_CONSOLE</span>
                 </div>
                 <span className="text-[10px] text-content-muted bg-base px-2 py-0.5 rounded border border-hairline">
-                  {isEmailJSConfigured() ? 'DIRECT_SEND' : 'MAILTO_FALLBACK'}
+                  DIRECT_SEND
                 </span>
               </div>
 
@@ -358,17 +340,12 @@ export const Contact: React.FC = () => {
                       className="p-3 rounded-lg border border-accent-lime/40 bg-accent-lime/10 text-accent-lime font-mono text-xs flex items-center gap-2"
                     >
                       <Check className="w-4 h-4 shrink-0" />
-                      <span>
-                        {isEmailJSConfigured()
-                          ? contactContent.form.successMessage
-                          : 'Opening mail client with prefilled transmission...'}
-                      </span>
+                      <span>{contactContent.form.successMessage}</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Name field */}
                   <div>
                     <label
                       htmlFor="contact-name"
@@ -388,7 +365,6 @@ export const Contact: React.FC = () => {
                     />
                   </div>
 
-                  {/* Email field */}
                   <div>
                     <label
                       htmlFor="contact-email"
@@ -409,7 +385,6 @@ export const Contact: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Message field */}
                 <div>
                   <label
                     htmlFor="contact-message"
@@ -429,7 +404,6 @@ export const Contact: React.FC = () => {
                   />
                 </div>
 
-                {/* Submit button */}
                 <button
                   type="submit"
                   disabled={isSending}
